@@ -135,6 +135,11 @@ async def godUser(message):
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(
                 prefix + "prefix") is True:
             await message.channel.send("what do you want me to roll?")
+        elif message.content.find(prefix+"annoy")!=-1:
+            x=0
+            while(x<20):
+                await message.channel.send("Vasu is a god")
+                x+=1
 
         # ##############################ADD NEW COMMANDS HERE#################################
 
@@ -249,7 +254,7 @@ async def on_message(message):
     messages += 1
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
-    god_users = ["Freye#8983"]
+    god_users = ["Fireye#8983","Vasu Kedia#6141"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
 
