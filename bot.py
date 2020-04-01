@@ -7,7 +7,6 @@ client = discord.Client()
 messages = 0
 joined = 0
 prefix = "?"
-print("test")
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
