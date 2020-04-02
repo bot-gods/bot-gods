@@ -7,6 +7,7 @@ client = discord.Client()
 messages = 0
 joined = 0
 prefix = "?"
+print("KAI DID you get this")
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -45,7 +46,8 @@ async def godUser(message):
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
-        if message.content.startswith(prefix + "prefix") is True and message.content.endswith(prefix + "prefix") is False:
+        if message.content.startswith(prefix + "prefix") is True and message.content.endswith(
+                prefix + "prefix") is False:
             msg = message.content.replace(f"""{prefix}prefix """, "")
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
@@ -64,10 +66,12 @@ async def godUser(message):
                 await message.channel.send(f"""Prefix changed to: {prefix}""")
             else:
                 await message.channel.send("please put a prefix in!")
-        elif message.content.startswith(prefix + "prefix") is True and message.content.endswith(prefix + "prefix") is True:
+        elif message.content.startswith(prefix + "prefix") is True and message.content.endswith(
+                prefix + "prefix") is True:
             await message.channel.send("please put a prefix in!")
         # check for !help
-        if message.content.startswith(prefix + "help") is True and message.content.endswith(prefix + "help") is True:
+        if message.content.startswith(prefix + "help") is True and message.content.endswith(
+                prefix + "help") is True:
             # sends help message
             embedh = discord.Embed(title="Help", Description="what kind of help do you need?", color=3456491)
             embedh.add_field(name=f"""{prefix}help cmd""", value="Display all the bot commands")
@@ -135,11 +139,6 @@ async def godUser(message):
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(
                 prefix + "prefix") is True:
             await message.channel.send("what do you want me to roll?")
-        elif message.content.find(prefix+"annoy")!=-1:
-            x=0
-            while(x<20):
-                await message.channel.send("Vasu is a god")
-                x+=1
 
         # ##############################ADD NEW COMMANDS HERE#################################
 
@@ -254,7 +253,7 @@ async def on_message(message):
     messages += 1
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
-    god_users = ["Fireye#8983","Vasu Kedia#6141"]
+    god_users = ["Freye#8983"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
 
