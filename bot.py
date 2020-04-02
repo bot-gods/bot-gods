@@ -118,6 +118,7 @@ async def godUser(message):
             rll = rll.replace(f"""{prefix}roll """, "")
             rll = rll.replace(f"""{prefix}roll""", "")
             num = "str"
+
             try:
                 num = abs(int(rll))
             except ValueError:
@@ -265,7 +266,7 @@ async def on_message(message):
     messages += 1
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
-    god_users = ["Freye#8983"]
+    god_users = ["Fireye#8983", "VasuKedia#6141"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
 
