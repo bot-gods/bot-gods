@@ -112,7 +112,7 @@ async def godUser(message):
             rll = message.content.replace(f"""{prefix}roll d""", "")
             rll = rll.replace(f"""{prefix}roll """, "")
             rll = rll.replace(f"""{prefix}roll""", "")
-            num = "lel"
+            num = "test"
             try:
                 num = abs(int(rll))
             except ValueError:
