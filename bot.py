@@ -7,6 +7,7 @@ client = discord.Client()
 messages = 0
 joined = 0
 prefix = "?"
+
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -18,6 +19,10 @@ if discord.guild.name == "Bot test":
 else:
     prefix = "?"
 """
+@client.event
+async def on_ready():
+    await client.change_presence(activity=discord.Game(name='?help'))
+
 async def update_stats():
     await client.wait_until_ready()
     global messages, joined
@@ -112,7 +117,8 @@ async def godUser(message):
             rll = message.content.replace(f"""{prefix}roll d""", "")
             rll = rll.replace(f"""{prefix}roll """, "")
             rll = rll.replace(f"""{prefix}roll""", "")
-            num = "test"
+            num = "str"
+
             try:
                 num = abs(int(rll))
             except ValueError:
@@ -128,8 +134,19 @@ async def godUser(message):
                         await message.channel.send(f"""A NATURAL {rnum}!""")
                     else:
                         await message.channel.send(rnum)
-                # else:
-
+                else:
+                    if rll == "SW":
+                        def check(author):
+                            def inner_check(message):
+                                if message.author != author:
+                                    return False
+                                try:
+                                    str(message.content)
+                                    return True
+                                except ValueError:
+                                    return False
+                            return inner_check
+                        arg = await client.wait_for('message', check=check(message.author), timeout=30)
             else:
                 await message.channel.send("what do you want me to roll?")
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(
