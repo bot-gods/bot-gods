@@ -124,6 +124,7 @@ async def godUser(message):
             try:
                 num = abs(int(rll))
             except ValueError:
+                await message.channel.send(rll)
                 pass
             if rll != "":
                 # DICE STUFF HERE
@@ -138,21 +139,25 @@ async def godUser(message):
                         await message.channel.send(rnum)
                 else:
                     if rll == "SW":
-                        def check(author):
-                            def inner_check(message):
-                                if message.author != author:
-                                    return False
-                                try:
-                                    str(message.content)
-                                    return True
-                                except ValueError:
-                                    return False
-                            return inner_check
-                        arg = await client.wait_for('message', check=check(message.author), timeout=30)
+                        def check(m):
+                            if m.author.name == message.author.name and m.channel.name == message.channel.name:
+                                return True
+                            else:
+                                return False
+                        msg = "404 file not found"
+                        try:
+                            msg = await client.wait_for('message', check=check, timeout=60)
+                        except TimeoutError:
+                            await message.channel.send("timed out. try again.")
+                            pass
+                        except Exception as e:
+                            print(e)
+                            pass
+                        await message.channel.send(msg)
+
             else:
                 await message.channel.send("what do you want me to roll?")
-        elif message.content.startswith(prefix + "roll") is True and message.content.endswith(
-                prefix + "prefix") is True:
+        elif message.content.startswith(prefix + "roll") is True and message.content.endswith(prefix + "prefix") is True:
             await message.channel.send("what do you want me to roll?")
 
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -209,18 +214,15 @@ async def basicUser(message):
                 await message.channel.send(embed=embedhe)
             elif message.content.endswith("members") is True:
                 embedme = discord.Embed(title=f"""{prefix}members""", Description="member count", color=3456491)
-                embedme.add_field(name=f"""{prefix}members""",
-                                  value="will return the current number of members in the server")
+                embedme.add_field(name=f"""{prefix}members""", value="will return the current number of members in the server")
                 await message.channel.send(embed=embedme)
             elif message.content.endswith("prefix") is True:
-                embedp = discord.Embed(title=f"""{prefix}prefix""", Description="change the prefix",
-                                       color=3456491)
+                embedp = discord.Embed(title=f"""{prefix}prefix""", Description="change the prefix",color=3456491)
                 embedp.add_field(name=f"""{prefix}prefix NEW-PREFIX""", value="changes the prefix")
                 await message.channel.send(embed=embedp)
             elif message.content.endswith("roll") is True:
                 embedr = discord.Embed(title=f"""{prefix}roll""", Description="roll a dice", color=3456491)
-                embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""",
-                                 value="roll a dice with any amount of sides!")
+                embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""", value="roll a dice with any amount of sides!")
                 await message.channel.send(embed=embedr)
         # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
