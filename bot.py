@@ -6,7 +6,22 @@ from random import *
 client = discord.Client()
 messages = 0
 joined = 0
+oldUser = "user"
 prefix = "?"
+boolSW = False
+green = 0
+purple = 0
+yellow = 0
+red = 0
+blue = 0
+black = 0
+Bgreen = False
+Bpurple = False
+Byellow = False
+Bred = False
+Bblue = False
+Bblack = False
+calc = False
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -46,6 +61,11 @@ async def update_stats():
 
 async def godUser(message):
     global prefix
+    global oldUser
+    global boolSW
+    global green, purple, yellow, red, blue, black
+    global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
+    global calc
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -129,7 +149,6 @@ async def godUser(message):
             if rll != "":
                 # DICE STUFF HERE
                 if isinstance(num, int):
-                    print("numint")
                     rnum = randint(1, num)
                     if rnum == 1:
                         await message.channel.send(f"""A NATURAL ONE!""")
@@ -138,28 +157,96 @@ async def godUser(message):
                     else:
                         await message.channel.send(rnum)
                 else:
-                    if rll == "SW":
-                        def check(m):
-                            if m.author.name == message.author.name and m.channel.name == message.channel.name:
-                                return True
-                            else:
-                                return False
-                        msg = "404 file not found"
-                        try:
-                            msg = await client.wait_for('message', check=check, timeout=60)
-                        except TimeoutError:
-                            await message.channel.send("timed out. try again.")
-                            pass
-                        except Exception as e:
-                            print(e)
-                            pass
-                        await message.channel.send(msg)
-
+                    if rll == "Genesys" or rll == "genesys" or rll == "SW":
+                        oldUser = str(message.author)
+                        boolSW = True
+                        await message.channel.send("Reply 'roll' to this message please. if you want to stop at any time type: 'cancel'")
+                        await on_message(message)
             else:
                 await message.channel.send("what do you want me to roll?")
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(prefix + "prefix") is True:
             await message.channel.send("what do you want me to roll?")
-
+        if boolSW == True and oldUser == str(message.author) and message.content == "cancel":
+            boolSW = True
+            await message.channel.send("process cancelled. :)")
+        if boolSW == True and oldUser == str(message.author) and message.content == "roll":
+            await message.channel.send("how many green dice?")
+            Bgreen = True
+            await on_message(message)
+        if Bgreen == True and boolSW == True and oldUser == str(message.author):
+            try:
+                green = int(message.content)
+                await message.channel.send("how many purple dice?")
+                Bgreen = False
+                Bpurple = True
+                await on_message(message)
+            except ValueError:
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            except Exception as e:
+                print(e)
+                await message.channel.send("An error has occurred. Try again, or cancel")
+        if Bpurple == True and boolSW == True and oldUser == str(message.author):
+            try:
+                purple = int(message.content)
+                await message.channel.send("how many yellow dice?")
+                Bpurple = False
+                Byellow = True
+                await on_message(message)
+            except ValueError:
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            except Exception as e:
+                print(e)
+                await message.channel.send("An error has occurred. Try again, or cancel")
+        if Byellow == True and boolSW == True and oldUser == str(message.author):
+            try:
+                yellow = int(message.content)
+                await message.channel.send("how many red dice?")
+                Byellow = False
+                Bred = True
+                await on_message(message)
+            except ValueError:
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            except Exception as e:
+                print(e)
+                await message.channel.send("An error has occurred. Try again, or cancel")
+        if Bred == True and boolSW == True and oldUser == str(message.author):
+            try:
+                red = int(message.content)
+                await message.channel.send("how many blue dice?")
+                Bred = False
+                Bblue = True
+                await on_message(message)
+            except ValueError:
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            except Exception as e:
+                print(e)
+                await message.channel.send("An error has occurred. Try again, or cancel")
+        if Bblue == True and boolSW == True and oldUser == str(message.author):
+            try:
+                blue = int(message.content)
+                await message.channel.send("how many black dice?")
+                Bblue = False
+                Bblack = True
+                await on_message(message)
+            except ValueError:
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            except Exception as e:
+                print(e)
+                await message.channel.send("An error has occurred. Try again, or cancel")
+        if Bblack == True and boolSW == True and oldUser == str(message.author):
+            try:
+                black = int(message.content)
+                await message.channel.send("how many black dice?")
+                Bblack = False
+                calc = True
+                await on_message(message)
+            except ValueError:
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            except Exception as e:
+                print(e)
+                await message.channel.send("An error has occurred. Try again, or cancel")
+        if calc == True and boolSW == True and oldUser == str(message.author):
+            await message.channel.send("green: " + str(green) + "\npurple: " + str(purple) + "\nyellow: " + str(yellow) + "\nred: " + str(red) + "\nblue: " + str(blue) + "\nblack " + str(black))
         # ##############################ADD NEW COMMANDS HERE#################################
 
 
@@ -270,28 +357,28 @@ async def on_message(message):
     messages += 1
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
-    god_users = ["Fireye#8983", "VasuKedia#6141"]
+    god_users = ["Fireye#8983", "Vasu Kedia#6141"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
 
     # check if message writer is a valid user
     if str(message.author) in god_users:
         # check if the message is in the correct channel
-        if str(message.channel) in channels:
-            await godUser(message)
+        # if str(message.channel) in channels:
+        await godUser(message)
         # check if the message is not in the correct channel, but if it begins with !
-        elif str(message.channel) not in channels and message.content.startswith(prefix) is True:
+        # elif str(message.channel) not in channels and message.content.startswith(prefix) is True:
             # log attempted command
-            print(f"""{message.author} said {message.content} in {message.channel}""")
+        #     print(f"""{message.author} said {message.content} in {message.channel}""")
     # check if writer is not a valid user
     elif str(message.author) not in god_users:
         # check if the message is in the correct channel
-        if str(message.channel) in channels:
-            await basicUser(message)
+        #if str(message.channel) in channels:
+        await basicUser(message)
         # check if the message is not in the correct channel, but if it begins with !
-        elif str(message.channel) not in channels and message.content.startswith(prefix) is True:
+        # elif str(message.channel) not in channels and message.content.startswith(prefix) is True:
             # log attempted command
-            print(f"""{message.author} tried to use '{message.content}' in {message.channel}""")
+        #     print(f"""{message.author} tried to use '{message.content}' in {message.channel}""")
 
 @client.event
 async def on_member_join(member):
