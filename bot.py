@@ -283,51 +283,16 @@ async def on_message(message):
     god_users = ["Fireye#8983", "Vasu Kedia#6141"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
-    if boolSW == True and oldUser == str(message.author) and message.content == "cancel":
+    if calc == True and boolSW == True and oldUser == str(message.author):
+        await message.channel.send("green: " + str(green) + "\npurple: " + str(purple) + "\nyellow: " + str(yellow) + "\nred: " + str(red) + "\nblue: " + str(blue) + "\nblack " + str(black))
         boolSW = False
-        await message.channel.send("process cancelled. :)")
-    if boolSW == True and oldUser == str(message.author) and message.content == "roll":
-        await message.channel.send("how many green dice?")
-        Bgreen = True
-    if Bgreen == True and boolSW == True and oldUser == str(message.author):
+        calc == False
+    if Bblack == True and boolSW == True and oldUser == str(message.author):
         try:
-            green = int(message.content)
-            await message.channel.send("how many purple dice?")
-            Bgreen = False
-            Bpurple = True
-        except ValueError:
-            await message.channel.send("FWhoops! Looks like you put in a word! Try again with a number.")
-        except Exception as e:
-            print(e)
-            await message.channel.send("An error has occurred. Try again, or cancel")
-    if Bpurple == True and boolSW == True and oldUser == str(message.author):
-        try:
-            purple = int(message.content)
-            await message.channel.send("how many yellow dice?")
-            Bpurple = False
-            Byellow = True
-        except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
-        except Exception as e:
-            print(e)
-            await message.channel.send("An error has occurred. Try again, or cancel")
-    if Byellow == True and boolSW == True and oldUser == str(message.author):
-        try:
-            yellow = int(message.content)
-            await message.channel.send("how many red dice?")
-            Byellow = False
-            Bred = True
-        except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
-        except Exception as e:
-            print(e)
-            await message.channel.send("An error has occurred. Try again, or cancel")
-    if Bred == True and boolSW == True and oldUser == str(message.author):
-        try:
-            red = int(message.content)
-            await message.channel.send("how many blue dice?")
-            Bred = False
-            Bblue = True
+            black = int(message.content)
+            await message.channel.send("how many black dice?")
+            Bblack = False
+            calc = True
         except ValueError:
             await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
@@ -344,21 +309,64 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if Bblack == True and boolSW == True and oldUser == str(message.author):
+    if Bred == True and boolSW == True and oldUser == str(message.author):
         try:
-            black = int(message.content)
-            await message.channel.send("how many black dice?")
-            Bblack = False
-            calc = True
+            red = int(message.content)
+            await message.channel.send("how many blue dice?")
+            Bred = False
+            Bblue = True
         except ValueError:
             await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if calc == True and boolSW == True and oldUser == str(message.author):
-        await message.channel.send("green: " + str(green) + "\npurple: " + str(purple) + "\nyellow: " + str(yellow) + "\nred: " + str(red) + "\nblue: " + str(blue) + "\nblack " + str(black))
+    if Byellow == True and boolSW == True and oldUser == str(message.author):
+        try:
+            yellow = int(message.content)
+            await message.channel.send("how many red dice?")
+            Byellow = False
+            Bred = True
+        except ValueError:
+            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+        except Exception as e:
+            print(e)
+            await message.channel.send("An error has occurred. Try again, or cancel")
+    if Bpurple == True and boolSW == True and oldUser == str(message.author):
+        try:
+            purple = int(message.content)
+            await message.channel.send("how many yellow dice?")
+            Bpurple = False
+            Byellow = True
+        except ValueError:
+            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+        except Exception as e:
+            print(e)
+            await message.channel.send("An error has occurred. Try again, or cancel")
+    if Bgreen == True and boolSW == True and oldUser == str(message.author):
+        try:
+            green = int(message.content)
+            await message.channel.send("how many purple dice?")
+            Bgreen = False
+            Bpurple = True
+        except ValueError:
+            await message.channel.send("FWhoops! Looks like you put in a word! Try again with a number.")
+        except Exception as e:
+            print(e)
+            await message.channel.send("An error has occurred. Try again, or cancel")
+    if boolSW == True and oldUser == str(message.author) and message.content == "roll":
+        await message.channel.send("how many green dice?")
+        Bgreen = True
+    if boolSW == True and oldUser == str(message.author) and message.content == "cancel":
         boolSW = False
-        calc == False
+        await message.channel.send("process cancelled. :)")
+
+
+
+
+
+
+
+
 
     # check if message writer is a valid user
     if str(message.author) in god_users:
