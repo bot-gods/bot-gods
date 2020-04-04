@@ -1,4 +1,5 @@
 from discord import *
+from discord.ext import *
 import discord
 import datetime
 import asyncio
@@ -159,8 +160,13 @@ async def godUser(message):
                 await message.channel.send("what do you want me to roll?")
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(prefix + "prefix") is True:
             await message.channel.send("what do you want me to roll?")
+        elif message.content.find(prefix + "clear") != -1:
+
+            amount = message.content.replace(prefix+ "clear ", "")
+            await message.channel.purge(limit=int(amount))
 
         # ##############################ADD NEW COMMANDS HERE#################################
+
 
 
 async def basicUser(message):
@@ -270,7 +276,7 @@ async def on_message(message):
     messages += 1
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
-    god_users = ["Fireye#8983", "VasuKedia#6141"]
+    god_users = ["Fireye#8983", "Vasu Kedia#6141"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
 
@@ -292,6 +298,7 @@ async def on_message(message):
         elif str(message.channel) not in channels and message.content.startswith(prefix) is True:
             # log attempted command
             print(f"""{message.author} tried to use '{message.content}' in {message.channel}""")
+
 
 @client.event
 async def on_member_join(member):
