@@ -22,6 +22,7 @@ Bred = False
 Bblue = False
 Bblack = False
 calc = False
+roll = False
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -65,7 +66,7 @@ async def godUser(message):
     global boolSW
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
-    global calc
+    global calc, roll
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -159,6 +160,7 @@ async def godUser(message):
                     if rll == "Genesys" or rll == "genesys" or rll == "SW":
                         oldUser = str(message.author)
                         boolSW = True
+                        roll = True
                         await message.channel.send("Reply 'roll' to this message please. if you want to stop at any time type: 'cancel'")
             else:
                 await message.channel.send("what do you want me to roll?")
@@ -276,85 +278,259 @@ async def on_message(message):
     global boolSW
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
-    global calc
+    global calc, roll
     messages += 1
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
     god_users = ["Fireye#8983", "Vasu Kedia#6141"]
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
-    if calc == True and boolSW == True and oldUser == str(message.author):
-        await message.channel.send("green: " + str(green) + "\npurple: " + str(purple) + "\nyellow: " + str(yellow) + "\nred: " + str(red) + "\nblue: " + str(blue) + "\nblack " + str(black))
-        boolSW = False
-        calc = False
+    # if calc == True and boolSW == True and oldUser == str(message.author):
+
     if Bblack == True and boolSW == True and oldUser == str(message.author):
+        success = 0
+        failure = 0
+        advantage = 0
+        threat = 0
+        triumph = 0
+        despair = 0
         try:
-            black = int(message.content)
-            Bblack = False
-            calc = True
+            if int(message.content) <= 500:
+                black = int(message.content)
+                Bblack = False
+                calc = True
+            else:
+                await message.channel.send("Please input a number less than 500")
         except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            if message.content != "cancel":
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
+        if calc == True:
+            # await message.channel.send("green: " + str(green) + "\npurple: " + str(purple) + "\nyellow: " + str(yellow) + "\nred: " + str(red) + "\nblue: " + str(blue) + "\nblack " + str(black))
+            if green != 0:
+                for i in range(green):
+                    i += 1
+                    g = randint(1, 8)
+                    if g == 1:
+                        pass
+                    elif g == 2:
+                        success += 1
+                    elif g == 3:
+                        success += 1
+                    elif g == 4:
+                        success += 2
+                    elif g == 5:
+                        advantage += 1
+                    elif g == 6:
+                        advantage += 1
+                    elif g == 7:
+                        advantage += 1
+                        success += 1
+                    elif g == 8:
+                        advantage += 2
+            if purple != 0:
+                for j in range(purple):
+                    j += 1
+                    p = randint(1, 8)
+                    if p == 1:
+                        pass
+                    elif p == 2:
+                        failure += 1
+                    elif p == 3:
+                        failure += 1
+                    elif p == 4:
+                        failure += 2
+                    elif p == 5:
+                        threat += 1
+                    elif p == 6:
+                        threat += 1
+                    elif p == 7:
+                        threat += 1
+                        failure += 1
+                    elif p == 8:
+                        threat += 2
+                        failure += 1
+            if yellow != 0:
+                for i in range(yellow):
+                    i += 1
+                    y = randint(1, 12)
+                    if y == 1:
+                        pass
+                    elif y == 2:
+                        success += 1
+                    elif y == 3:
+                        success += 1
+                    elif y == 4:
+                        success += 2
+                    elif y == 5:
+                        success += 2
+                    elif y == 6:
+                        advantage += 1
+                    elif y == 7:
+                        advantage += 1
+                        success += 1
+                    elif y == 8:
+                        advantage += 1
+                        success += 1
+                    elif y == 9:
+                        advantage += 1
+                        success += 1
+                    elif y == 10:
+                        advantage += 2
+                    elif y == 11:
+                        advantage += 2
+                    elif y == 12:
+                        triumph += 1
+                        success += 1
+            if red != 0:
+                for i in range(red):
+                    i += 1
+                    r = randint(1, 12)
+                    if r == 1:
+                        pass
+                    elif r == 2:
+                        failure += 1
+                    elif r == 3:
+                        failure += 1
+                    elif r == 4:
+                        failure += 2
+                    elif r == 5:
+                        failure += 2
+                    elif r == 6:
+                        threat += 1
+                    elif r == 7:
+                        threat += 1
+                        failure += 1
+                    elif r == 8:
+                        threat += 1
+                        failure += 1
+                    elif r == 9:
+                        threat += 1
+                        failure += 1
+                    elif r == 10:
+                        threat += 2
+                    elif r == 11:
+                        threat += 2
+                    elif r == 12:
+                        despair += 1
+            if blue != 0:
+                for i in range(blue):
+                    i += 1
+                    b = randint(1, 6)
+                    if b == 1:
+                        pass
+                    elif b == 2:
+                        pass
+                    elif b == 3:
+                        success += 1
+                    elif b == 4:
+                        advantage += 1
+                        success += 1
+                    elif b == 5:
+                        advantage += 2
+                    elif b == 6:
+                        advantage += 1
+            if black != 0:
+                for i in range(black):
+                    i += 1
+                    bl = randint(1, 6)
+                    if bl == 1:
+                        pass
+                    elif bl == 2:
+                        pass
+                    elif bl == 3:
+                        success += 1
+                    elif bl == 4:
+                        advantage += 1
+                        success += 1
+                    elif bl == 5:
+                        advantage += 2
+                    elif bl == 6:
+                        advantage += 1
+            await message.channel.send(f"success: {success}\nadvantage: {advantage}\nfailure: {failure}\nthreat: {threat}\ntriumph: {triumph}\ndespair: {despair}")
+            boolSW = False
+            calc = False
     if Bblue == True and boolSW == True and oldUser == str(message.author):
         try:
-            blue = int(message.content)
-            await message.channel.send("how many black dice?")
-            Bblue = False
-            Bblack = True
+            if int(message.content) <= 500:
+                blue = int(message.content)
+                await message.channel.send("how many black dice?")
+                Bblue = False
+                Bblack = True
+            else:
+                await message.channel.send("Please input a number less than 500")
         except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            if message.content != "cancel":
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
     if Bred == True and boolSW == True and oldUser == str(message.author):
         try:
-            red = int(message.content)
-            await message.channel.send("how many blue dice?")
-            Bred = False
-            Bblue = True
+            if int(message.content) <= 500:
+                red = int(message.content)
+                await message.channel.send("how many blue dice?")
+                Bred = False
+                Bblue = True
+            else:
+                await message.channel.send("Please input a number less than 500")
         except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            if message.content != "cancel":
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
     if Byellow == True and boolSW == True and oldUser == str(message.author):
         try:
-            yellow = int(message.content)
-            await message.channel.send("how many red dice?")
-            Byellow = False
-            Bred = True
+            if int(message.content) <= 500:
+                yellow = int(message.content)
+                await message.channel.send("how many red dice?")
+                Byellow = False
+                Bred = True
+            else:
+                await message.channel.send("Please input a number less than 500")
         except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            if message.content != "cancel":
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
     if Bpurple == True and boolSW == True and oldUser == str(message.author):
         try:
-            purple = int(message.content)
-            await message.channel.send("how many yellow dice?")
-            Bpurple = False
-            Byellow = True
+            if int(message.content) <= 500:
+                purple = int(message.content)
+                await message.channel.send("how many yellow dice?")
+                Bpurple = False
+                Byellow = True
+            else:
+                await message.channel.send("Please input a number less than 500")
         except ValueError:
-            await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
+            if message.content != "cancel":
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
     if Bgreen == True and boolSW == True and oldUser == str(message.author):
         try:
-            green = int(message.content)
-            await message.channel.send("how many purple dice?")
-            Bgreen = False
-            Bpurple = True
+            if int(message.content) <= 500:
+                green = int(message.content)
+                await message.channel.send("how many purple dice?")
+                Bgreen = False
+                Bpurple = True
+            else:
+                await message.channel.send("Please input a number less than 500")
         except ValueError:
-            await message.channel.send("FWhoops! Looks like you put in a word! Try again with a number.")
+            if message.content != "cancel":
+                await message.channel.send("Whoops! Looks like you put in a word! Try again with a number.")
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
     if boolSW == True and oldUser == str(message.author) and message.content == "roll":
         await message.channel.send("how many green dice?")
         Bgreen = True
+        roll = False
     if boolSW == True and oldUser == str(message.author) and message.content == "cancel":
         boolSW = False
         await message.channel.send("process cancelled. :)")
