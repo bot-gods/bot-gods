@@ -286,11 +286,10 @@ async def on_message(message):
     if calc == True and boolSW == True and oldUser == str(message.author):
         await message.channel.send("green: " + str(green) + "\npurple: " + str(purple) + "\nyellow: " + str(yellow) + "\nred: " + str(red) + "\nblue: " + str(blue) + "\nblack " + str(black))
         boolSW = False
-        calc == False
+        calc = False
     if Bblack == True and boolSW == True and oldUser == str(message.author):
         try:
             black = int(message.content)
-            await message.channel.send("how many black dice?")
             Bblack = False
             calc = True
         except ValueError:
