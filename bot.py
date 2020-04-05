@@ -76,17 +76,6 @@ async def godUser(message):
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
                 prefix = msg
-                """
-                try:
-                    # log to stats.txt
-                    with open("stats.txt", "a") as f:
-                        # log message
-                        f.write(f"prefix changed to {prefix} on server: {guild.name}\n")
-                # exception
-                except Exception as e:
-                    # print exception
-                    print(e)
-                """
                 await message.channel.send(f"""Prefix changed to: {prefix}""")
             else:
                 await message.channel.send("please put a prefix in!")
@@ -172,7 +161,11 @@ async def godUser(message):
 
 async def basicUser(message):
     global prefix
-    global messages, joined
+    global oldUser
+    global boolSW
+    global green, purple, yellow, red, blue, black
+    global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
+    global calc, roll
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
         if message.content.startswith(prefix + "prefix") is True and message.content.endswith(
@@ -181,17 +174,6 @@ async def basicUser(message):
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
                 prefix = msg
-                """
-                try:
-                    # log to stats.txt
-                    with open("stats.txt", "a") as f:
-                        # log message
-                        f.write(f"prefix changed to {prefix} on server: {guild.name}\n")
-                # exception
-                except Exception as e:
-                    # print exception
-                    print(e)
-                """
                 await message.channel.send(f"""Prefix changed to: {prefix}""")
             else:
                 await message.channel.send("please put a prefix in!")
@@ -260,7 +242,12 @@ async def basicUser(message):
                         await message.channel.send(f"""A NATURAL {rnum}!""")
                     else:
                         await message.channel.send(rnum)
-                # else: put star wars dice function here
+                else:
+                    if rll == "Genesys" or rll == "genesys" or rll == "SW":
+                        oldUser = str(message.author)
+                        boolSW = True
+                        roll = True
+                        await message.channel.send("Reply 'roll' to this message please. if you want to stop at any time type: 'cancel'")
 
             else:
                 await message.channel.send("what do you want me to roll?")
@@ -449,7 +436,19 @@ async def on_message(message):
                         advantage += 2
                     elif bl == 6:
                         advantage += 1
-            await message.channel.send(f"success: {success}\nadvantage: {advantage}\nfailure: {failure}\nthreat: {threat}\ntriumph: {triumph}\ndespair: {despair}")
+            # await message.channel.send(f"success: {success}\nadvantage: {advantage}\nfailure: {failure}\nthreat: {threat}\ntriumph: {triumph}\ndespair: {despair}")
+            sf = success - failure
+            at = advantage - threat
+            if sf >= 0:
+                await message.channel.send(f"success: {abs(sf)}")
+            elif sf < 0:
+                await message.channel.send(f"failure: {abs(sf)}")
+            if at >= 0:
+                await message.channel.send(f"advantage: {abs(at)}")
+            elif at < 0:
+                await message.channel.send(f"threat: {abs(at)}")
+            await message.channel.send(f"triumph: {triumph}")
+            await message.channel.send(f"despair: {despair}")
             boolSW = False
             calc = False
     if Bblue == True and boolSW == True and oldUser == str(message.author):
