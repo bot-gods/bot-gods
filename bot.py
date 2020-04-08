@@ -10,6 +10,7 @@ joined = 0
 oldUser = "user"
 prefix = "?"
 boolSW = False
+oldChannel = "channel"
 green = 0
 purple = 0
 yellow = 0
@@ -29,12 +30,6 @@ def readtoken():
         lines = f.readlines()
         return lines[0].strip()
 token = readtoken()
-"""
-if discord.guild.name == "Bot test":
-    prefix = "!"
-else:
-    prefix = "?"
-"""
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game(name='?help'))
@@ -54,7 +49,7 @@ async def update_stats():
             messages = 0
             joined = 0
             # refresh time in seconds
-            await asyncio.sleep(3600)
+            await asyncio.sleep(86400)
         # exception
         except Exception as e:
             # print exception
@@ -71,13 +66,21 @@ async def godUser(message):
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
-        if message.content.startswith(prefix + "prefix") is True and message.content.endswith(
-                prefix + "prefix") is False:
+        if message.content.startswith(prefix + "prefix") is True and message.content.endswith(prefix + "prefix") is False:
             msg = message.content.replace(f"""{prefix}prefix """, "")
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
                 prefix = msg
-                await message.channel.send(f"""Prefix changed to: {prefix}""")
+                try:
+                    # log to stats.txt
+                    with open("prefix.txt", "a") as f:
+                        # log message
+                        f.write(f"prefix in {str(message.guild)} was changed to {prefix}")
+                    # exception
+                except Exception as e:
+                    # print exception
+                    print(e)
+                await message.channel.send(f"""Prefix temporarily changed to: {prefix} It will be permanently changed soon.""")
             else:
                 await message.channel.send("please put a prefix in!")
         elif message.content.startswith(prefix + "prefix") is True and message.content.endswith(
@@ -97,7 +100,7 @@ async def godUser(message):
                 embedc.add_field(name=f"""{prefix}hello""", value="Sends you a friendly greeting")
                 embedc.add_field(name=f"""{prefix}members""", value="# of members in the server")
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
-                embedc.add_field(name=f"""{prefix}roll""", value="roll a dice")
+                embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -114,8 +117,8 @@ async def godUser(message):
                 await message.channel.send(embed=embedp)
             elif message.content.endswith("roll") is True:
                 embedr = discord.Embed(title=f"""{prefix}roll""", Description="roll a dice", color=3456491)
-                embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""",
-                                 value="roll a dice with any amount of sides!")
+                embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""", value="roll a dice with any amount of sides!")
+                embedr.add_field(name=f"""{prefix}roll SW / {prefix}roll Genesys""", value="roll genesys style dice.")
                 await message.channel.send(embed=embedr)
                 # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -201,7 +204,7 @@ async def basicUser(message):
                 embedc.add_field(name=f"""{prefix}hello""", value="Sends you a friendly greeting")
                 embedc.add_field(name=f"""{prefix}members""", value="# of members in the server")
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
-                embedc.add_field(name=f"""{prefix}roll""", value="roll a dice")
+                embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -218,6 +221,7 @@ async def basicUser(message):
             elif message.content.endswith("roll") is True:
                 embedr = discord.Embed(title=f"""{prefix}roll""", Description="roll a dice", color=3456491)
                 embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""", value="roll a dice with any amount of sides!")
+                embedr.add_field(name=f"""{prefix}roll SW / {prefix}roll Genesys""", value="roll genesys style dice.")
                 await message.channel.send(embed=embedr)
         # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -251,6 +255,7 @@ async def basicUser(message):
                 else:
                     if rll == "Genesys" or rll == "genesys" or rll == "SW":
                         oldUser = str(message.author)
+                        oldChannel = str(message.channel)
                         boolSW = True
                         roll = True
                         await message.channel.send("Reply 'roll' to this message please. if you want to stop at any time type: 'cancel'")
@@ -273,6 +278,10 @@ async def on_message(message):
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
     messages += 1
+    if str(message.guild) == "Bot test":
+        prefix = "!"
+    else:
+        prefix = "?"
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
     god_users = ["Fireye#8983", "Vasu Kedia#6141"]
@@ -453,8 +462,10 @@ async def on_message(message):
                 await message.channel.send(f"advantage: {abs(at)}")
             elif at < 0:
                 await message.channel.send(f"threat: {abs(at)}")
-            await message.channel.send(f"triumph: {triumph}")
-            await message.channel.send(f"despair: {despair}")
+            if triumph > 0:
+                await message.channel.send(f"triumph: {triumph}")
+            if despair > 0:
+                await message.channel.send(f"despair: {despair}")
             boolSW = False
             calc = False
     if Bblue == True and boolSW == True and oldUser == str(message.author):
@@ -532,7 +543,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if boolSW == True and oldUser == str(message.author) and message.content == "roll":
+    if boolSW == True and oldUser == str(message.author) and message.content == "roll" or message.content == "Roll":
         await message.channel.send("how many green dice?")
         Bgreen = True
         roll = False
