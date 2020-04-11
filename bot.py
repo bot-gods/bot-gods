@@ -25,6 +25,7 @@ Bblue = False
 Bblack = False
 calc = False
 roll = False
+prfx = "f"
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -73,14 +74,23 @@ async def godUser(message):
                 prefix = msg
                 try:
                     # log to stats.txt
-                    with open("prefix.txt", "a") as f:
-                        # log message
-                        f.write(f"prefix in {str(message.guild)} was changed to {prefix}")
+                    with open("prefix.txt", "r+") as f:
+                        # log prefix
+                        if not str(message.guild) in f.read():
+                            f.write(f"{str(message.guild)} {prefix}\n")
+                        else:
+                            new_f = f.readlines()
+                            f.seek(0)
+                            for line in new_f:
+                                if str(message.guild) not in line:
+                                    f.write(line)
+                            f.truncate()
+                            f.write(f"{str(message.guild)} {prefix}\n")
                     # exception
                 except Exception as e:
                     # print exception
                     print(e)
-                await message.channel.send(f"""Prefix temporarily changed to: {prefix} It will be permanently changed soon.""")
+                await message.channel.send(f"""Prefix changed to: {prefix}""")
             else:
                 await message.channel.send("please put a prefix in!")
         elif message.content.startswith(prefix + "prefix") is True and message.content.endswith(
@@ -161,9 +171,14 @@ async def godUser(message):
             await message.channel.send("what do you want me to roll?")
         elif message.content.find(prefix + "clear") != -1:
 
-            amount = message.content.replace(prefix+ "clear ", "")
+            amount = message.content.replace(prefix + "clear ", "")
             await message.channel.purge(limit=int(amount))
-
+        if message.content.startswith(f"{prefix}reactionrole new"):
+            print(str(message.guild))
+        elif message.content.startswith(f"{prefix}reactionrole edit"):
+            pass
+        elif message.content.startswith(f"{prefix}reactionrole delete"):
+            pass
         # ##############################ADD NEW COMMANDS HERE#################################
 
 
@@ -268,6 +283,22 @@ async def basicUser(message):
 
         # ##############################ADD NEW COMMANDS HERE#################################
 
+def readprefix(message):
+    global prfx
+    global prefix
+    with open('prefix.txt', 'rt') as myfile:
+        for myline in myfile:
+            if myline.find(str(message.guild)) != -1:
+                prfx = str(myline)
+                prfx = prfx.replace(f"{str(message.guild)} ", "")
+                prfx = prfx.replace(f"\n", "")
+    if prfx != "f":
+        prefix = prfx
+    if prfx == "f":
+        prefix = "?"
+
+
+
 @client.event
 async def on_message(message):
     global messages
@@ -278,10 +309,7 @@ async def on_message(message):
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
     messages += 1
-    if str(message.guild) == "Bot test":
-        prefix = "!"
-    else:
-        prefix = "?"
+    readprefix(message)
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
     god_users = ["Fireye#8983", "Vasu Kedia#6141"]
