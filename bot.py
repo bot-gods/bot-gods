@@ -198,6 +198,24 @@ async def basicUser(message):
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
                 prefix = msg
+                try:
+                    # log to stats.txt
+                    with open("prefix.txt", "r+") as f:
+                        # log prefix
+                        if not str(message.guild) in f.read():
+                            f.write(f"{str(message.guild)} {prefix}\n")
+                        else:
+                            new_f = f.readlines()
+                            f.seek(0)
+                            for line in new_f:
+                                if str(message.guild) not in line:
+                                    f.write(line)
+                            f.truncate()
+                            f.write(f"{str(message.guild)} {prefix}\n")
+                    # exception
+                except Exception as e:
+                    # print exception
+                    print(e)
                 await message.channel.send(f"""Prefix changed to: {prefix}""")
             else:
                 await message.channel.send("please put a prefix in!")
