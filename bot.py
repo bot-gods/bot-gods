@@ -17,6 +17,7 @@ yellow = 0
 red = 0
 blue = 0
 black = 0
+oldprefix = "yeet"
 Bgreen = False
 Bpurple = False
 Byellow = False
@@ -61,6 +62,7 @@ async def godUser(message):
     global prefix
     global oldUser
     global boolSW
+    global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
@@ -71,21 +73,18 @@ async def godUser(message):
             msg = message.content.replace(f"""{prefix}prefix """, "")
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
+                oldprefix = prefix
                 prefix = msg
                 try:
                     # log to stats.txt
-                    with open("prefix.txt", "r+") as f:
                         # log prefix
-                        if not str(message.guild) in f.read():
-                            f.write(f"{str(message.guild)} {prefix}\n")
-                        else:
-                            new_f = f.readlines()
-                            f.seek(0)
-                            for line in new_f:
-                                if str(message.guild) not in line:
-                                    f.write(line)
-                            f.truncate()
-                            f.write(f"{str(message.guild)} {prefix}\n")
+                        # f.write(f"{str(message.guild)} {prefix}\n")
+                    with open('prefix.txt', 'rt') as myfile:
+                        for myline in myfile:
+                            if myline.find(str(message.guild)) != -1:
+                                myline.replace(oldprefix, prefix)
+                            else:
+                                myfile.write(f"{str(message.guild)} {prefix}\n")
                     # exception
                 except Exception as e:
                     # print exception
@@ -187,6 +186,7 @@ async def basicUser(message):
     global prefix
     global oldUser
     global boolSW
+    global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
@@ -197,21 +197,16 @@ async def basicUser(message):
             msg = message.content.replace(f"""{prefix}prefix """, "")
             msg = msg.replace(f"""{prefix}prefix""", "")
             if msg != "":
+                oldprefix = prefix
                 prefix = msg
                 try:
                     # log to stats.txt
-                    with open("prefix.txt", "r+") as f:
-                        # log prefix
-                        if not str(message.guild) in f.read():
-                            f.write(f"{str(message.guild)} {prefix}\n")
-                        else:
-                            new_f = f.readlines()
-                            f.seek(0)
-                            for line in new_f:
-                                if str(message.guild) not in line:
-                                    f.write(line)
-                            f.truncate()
-                            f.write(f"{str(message.guild)} {prefix}\n")
+                    with open('prefix.txt', 'rt') as myfile:
+                        for myline in myfile:
+                            if myline.find(str(message.guild)) != -1:
+                                myline.replace(oldprefix, prefix)
+                            else:
+                                myfile.write(f"{str(message.guild)} {prefix}\n")
                     # exception
                 except Exception as e:
                     # print exception
@@ -310,6 +305,7 @@ def readprefix(message):
                 prfx = str(myline)
                 prfx = prfx.replace(f"{str(message.guild)} ", "")
                 prfx = prfx.replace(f"\n", "")
+                prfx = prfx.replace(" ", "")
     if prfx != "f":
         prefix = prfx
     if prfx == "f":
