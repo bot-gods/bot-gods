@@ -171,7 +171,8 @@ async def godUser(message):
         elif message.content.find(prefix + "clear") != -1:
 
             amount = message.content.replace(prefix + "clear ", "")
-            await message.channel.purge(limit=int(amount))
+            await message.channel.purge(limit=int(amount) + 1)
+            await(await message.channel.send(f"{amount} messages cleared.")).delete(delay=3)
         if message.content.startswith(f"{prefix}reactionrole new"):
             print(str(message.guild))
         elif message.content.startswith(f"{prefix}reactionrole edit"):
@@ -494,21 +495,25 @@ async def on_message(message):
                             advantage += 2
                         elif bl == 6:
                             advantage += 1
+                await asyncio.sleep(1.5)
             # await message.channel.send(f"success: {success}\nadvantage: {advantage}\nfailure: {failure}\nthreat: {threat}\ntriumph: {triumph}\ndespair: {despair}")
             sf = success - failure
             at = advantage - threat
+            embedSW = discord.Embed(title=f"""Results""", Description="the results of your roll!",color=3456491)
+
             if sf >= 0:
-                await message.channel.send(f"success: {abs(sf)}")
+                embedSW.add_field(name=f"success: ", value=f"{abs(sf)}")
             elif sf < 0:
-                await message.channel.send(f"failure: {abs(sf)}")
+                embedSW.add_field(name=f"failure: ", value=f"{abs(sf)}")
             if at >= 0:
-                await message.channel.send(f"advantage: {abs(at)}")
+                embedSW.add_field(name=f"advantage: ", value=f"{abs(at)}")
             elif at < 0:
-                await message.channel.send(f"threat: {abs(at)}")
+                embedSW.add_field(name=f"threat: ", value=f"{abs(at)}")
             if triumph > 0:
-                await message.channel.send(f"triumph: {triumph}")
+                embedSW.add_field(name=f"triumph: ", value=f"{triumph}")
             if despair > 0:
-                await message.channel.send(f"despair: {despair}")
+                embedSW.add_field(name=f"despair: ", value=f"{despair}")
+            await message.channel.send(embed=embedSW)
             boolSW = False
             calc = False
     if Bblue == True and boolSW == True and oldUser == str(message.author):
@@ -592,6 +597,14 @@ async def on_message(message):
         roll = False
     if boolSW == True and oldUser == str(message.author) and message.content == "cancel":
         boolSW = False
+        Bgreen = False
+        Bpurple = False
+        Byellow = False
+        Bred = False
+        Bblue = False
+        Bblack = False
+        calc = False
+        roll = False
         await message.channel.send("process cancelled. :)")
 
 
