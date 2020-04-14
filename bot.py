@@ -110,6 +110,7 @@ async def godUser(message):
                 embedc.add_field(name=f"""{prefix}members""", value="# of members in the server")
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
                 embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
+                embedc.add_field(name=f"""{prefix}clear""", value="delete a number of messages")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -129,6 +130,10 @@ async def godUser(message):
                 embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""", value="roll a dice with any amount of sides!")
                 embedr.add_field(name=f"""{prefix}roll SW / {prefix}roll Genesys""", value="roll genesys style dice.")
                 await message.channel.send(embed=embedr)
+            elif message.content.endswith("clear") is True:
+                embedclr = discord.Embed(title=f"""{prefix}clear""", Description="delete a number of messages", color=3456491)
+                embedclr.add_field(name=f"""{prefix}clear MESSAGES""", value="delete a number of messages")
+                await message.channel.send(embed=embedclr)
                 # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
             # reply hello
@@ -234,6 +239,7 @@ async def basicUser(message):
                 embedc.add_field(name=f"""{prefix}members""", value="# of members in the server")
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
                 embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
+                embedc.add_field(name=f"""{prefix}clear""", value="delete a number of messages")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -252,6 +258,10 @@ async def basicUser(message):
                 embedr.add_field(name=f"""{prefix}roll NUMBER / {prefix}roll d+NUMBER""", value="roll a dice with any amount of sides!")
                 embedr.add_field(name=f"""{prefix}roll SW / {prefix}roll Genesys""", value="roll genesys style dice.")
                 await message.channel.send(embed=embedr)
+            elif message.content.endswith("clear") is True:
+                embedclr = discord.Embed(title=f"""{prefix}clear""", Description="delete a number of messages", color=3456491)
+                embedclr.add_field(name=f"""{prefix}clear MESSAGES""", value="delete a number of messages")
+                await message.channel.send(embed=embedclr)
         # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
             # reply with hi
@@ -294,7 +304,9 @@ async def basicUser(message):
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(
                 prefix + "prefix") is True:
             await message.channel.send("what do you want me to roll?")
+        elif message.content.find(prefix + "clear") != -1:
 
+            await message.content.send("You don't have permission to use this command.")
         # ##############################ADD NEW COMMANDS HERE#################################
 
 def readprefix(message):
@@ -495,7 +507,7 @@ async def on_message(message):
                             advantage += 2
                         elif bl == 6:
                             advantage += 1
-                await asyncio.sleep(1.5)
+                await asyncio.sleep(1)
             # await message.channel.send(f"success: {success}\nadvantage: {advantage}\nfailure: {failure}\nthreat: {threat}\ntriumph: {triumph}\ndespair: {despair}")
             sf = success - failure
             at = advantage - threat
