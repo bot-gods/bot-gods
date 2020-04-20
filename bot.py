@@ -31,6 +31,8 @@ def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
         return lines[0].strip()
+
+
 token = readtoken()
 @client.event
 async def on_ready():
@@ -92,12 +94,10 @@ async def godUser(message):
                 await message.channel.send(f"""Prefix changed to: {prefix}""")
             else:
                 await message.channel.send("please put a prefix in!")
-        elif message.content.startswith(prefix + "prefix") is True and message.content.endswith(
-                prefix + "prefix") is True:
+        elif message.content.startswith(prefix + "prefix") is True and message.content.endswith(prefix + "prefix") is True:
             await message.channel.send("please put a prefix in!")
         # check for !help
-        if message.content.startswith(prefix + "help") is True and message.content.endswith(
-                prefix + "help") is True:
+        if message.content.startswith(prefix + "help") is True and message.content.endswith(prefix + "help") is True:
             # sends help message
             embedh = discord.Embed(title="Help", Description="what kind of help do you need?", color=3456491)
             embedh.add_field(name=f"""{prefix}help cmd""", value="Display all the bot commands")
@@ -170,10 +170,22 @@ async def godUser(message):
                         roll = True
                         await message.channel.send("Reply 'roll' to this message please. if you want to stop at any time type: 'cancel'")
             else:
-                await message.channel.send("what do you want me to roll?")
+                rnum = randint(1, 20)
+                if rnum == 1:
+                    await message.channel.send(f"""A NATURAL ONE!""")
+                elif rnum == 20:
+                    await message.channel.send(f"""A NATURAL 20!""")
+                else:
+                    await message.channel.send(rnum)
         elif message.content.startswith(prefix + "roll") is True and message.content.endswith(prefix + "roll") is True:
-            await message.channel.send("what do you want me to roll?")
-        elif message.content.find(prefix + "clear") != -1:
+            rnum = randint(1, 20)
+            if rnum == 1:
+                await message.channel.send(f"""A NATURAL ONE!""")
+            elif rnum == 20:
+                await message.channel.send(f"""A NATURAL 20!""")
+            else:
+                await message.channel.send(rnum)
+        if message.content.find(prefix + "clear") != -1:
 
             amount = message.content.replace(prefix + "clear ", "")
             await message.channel.purge(limit=int(amount) + 1)
@@ -207,7 +219,7 @@ async def basicUser(message):
                 prefix = msg
                 try:
                     # log to stats.txt
-                    with open('prefix.txt', 'rt') as myfile:
+                    with open('prefix.txt', 'a') as myfile:
                         for myline in myfile:
                             if myline.find(str(message.guild)) != -1:
                                 myline.replace(oldprefix, prefix)
@@ -300,10 +312,21 @@ async def basicUser(message):
                         await message.channel.send("Reply 'roll' to this message please. if you want to stop at any time type: 'cancel'")
 
             else:
-                await message.channel.send("what do you want me to roll?")
-        elif message.content.startswith(prefix + "roll") is True and message.content.endswith(
-                prefix + "prefix") is True:
-            await message.channel.send("what do you want me to roll?")
+                rnum = randint(1, 20)
+                if rnum == 1:
+                    await message.channel.send(f"""A NATURAL ONE!""")
+                elif rnum == 20:
+                    await message.channel.send(f"""A NATURAL 20!""")
+                else:
+                    await message.channel.send(rnum)
+        elif message.content.startswith(prefix + "roll") is True and message.content.endswith(prefix + "roll") is True:
+            rnum = randint(1, 20)
+            if rnum == 1:
+                await message.channel.send(f"""A NATURAL ONE!""")
+            elif rnum == 20:
+                await message.channel.send(f"""A NATURAL 20!""")
+            else:
+                await message.channel.send(rnum)
         elif message.content.find(prefix + "clear") != -1:
 
             await message.content.send("You don't have permission to use this command.")
@@ -337,6 +360,7 @@ async def on_message(message):
     global calc, roll
     messages += 1
     readprefix(message)
+    # prefix = "!"
     id = client.get_guild(693537413448073328)
     channels = ["cmd", "current-commands"]
     god_users = ["Fireye#8983", "Vasu Kedia#6141"]
