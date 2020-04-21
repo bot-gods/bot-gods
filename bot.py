@@ -3,6 +3,7 @@ from discord.ext import *
 import discord
 import datetime
 import asyncio
+import os
 from random import *
 client = discord.Client()
 messages = 0
@@ -27,6 +28,8 @@ Bblack = False
 calc = False
 roll = False
 prfx = "f"
+dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
+os.chdir(dir)
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -77,16 +80,29 @@ async def godUser(message):
             if msg != "":
                 oldprefix = prefix
                 prefix = msg
+                print(oldprefix)
+                print(prefix)
                 try:
-                    # log to stats.txt
-                        # log prefix
-                        # f.write(f"{str(message.guild)} {prefix}\n")
-                    with open('prefix.txt', 'rt') as myfile:
-                        for myline in myfile:
-                            if myline.find(str(message.guild)) != -1:
-                                myline.replace(oldprefix, prefix)
-                            else:
-                                myfile.write(f"{str(message.guild)} {prefix}\n")
+                    with open('prefix.txt', 'r+') as f:
+                        strp = f.read()
+                        count = 0
+                        new_file_content = ""
+                        if strp.find(str(message.guild)) != -1:
+                            CoList = strp.split("\n")
+                            for i in CoList:
+                                if i:
+                                    count += 1
+                                if i.find(str(message.guild)) != -1:
+                                    stripped_line = i.strip()
+                                    new_line = stripped_line.replace(oldprefix, prefix)
+
+                            dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
+                            os.chdir(dir)
+                            f.write(new_line + "\n")
+                        else:
+                            f = open('prefix.txt', 'a')
+                            f.write(f"{str(message.guild)} {prefix}\n")
+                            f.close()
                     # exception
                 except Exception as e:
                     # print exception
@@ -189,7 +205,7 @@ async def godUser(message):
 
             amount = message.content.replace(prefix + "clear ", "")
             await message.channel.purge(limit=int(amount) + 1)
-            await(await message.channel.send(f"{amount} messages cleared.")).delete(delay=3)
+            await(await message.channel.send(f"{amount} messages cleared.")).delete(delay=4)
         if message.content.startswith(f"{prefix}reactionrole new"):
             print(str(message.guild))
         elif message.content.startswith(f"{prefix}reactionrole edit"):
@@ -328,20 +344,18 @@ async def basicUser(message):
             else:
                 await message.channel.send(rnum)
         elif message.content.find(prefix + "clear") != -1:
-
             await message.content.send("You don't have permission to use this command.")
         # ##############################ADD NEW COMMANDS HERE#################################
 
 def readprefix(message):
     global prfx
     global prefix
-    with open('prefix.txt', 'rt') as myfile:
+    with open('prefix.txt', 'r') as myfile:
         for myline in myfile:
             if myline.find(str(message.guild)) != -1:
                 prfx = str(myline)
                 prfx = prfx.replace(f"{str(message.guild)} ", "")
                 prfx = prfx.replace(f"\n", "")
-                prfx = prfx.replace(" ", "")
     if prfx != "f":
         prefix = prfx
     if prfx == "f":
