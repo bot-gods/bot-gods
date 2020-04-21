@@ -80,8 +80,6 @@ async def godUser(message):
             if msg != "":
                 oldprefix = prefix
                 prefix = msg
-                print(oldprefix)
-                print(prefix)
                 try:
                     with open('prefix.txt', 'r+') as f:
                         strp = f.read()
@@ -233,14 +231,29 @@ async def basicUser(message):
             if msg != "":
                 oldprefix = prefix
                 prefix = msg
+                oldprefix = prefix
+                prefix = msg
                 try:
-                    # log to stats.txt
-                    with open('prefix.txt', 'a') as myfile:
-                        for myline in myfile:
-                            if myline.find(str(message.guild)) != -1:
-                                myline.replace(oldprefix, prefix)
-                            else:
-                                myfile.write(f"{str(message.guild)} {prefix}\n")
+                    with open('prefix.txt', 'r+') as f:
+                        strp = f.read()
+                        count = 0
+                        new_file_content = ""
+                        if strp.find(str(message.guild)) != -1:
+                            CoList = strp.split("\n")
+                            for i in CoList:
+                                if i:
+                                    count += 1
+                                if i.find(str(message.guild)) != -1:
+                                    stripped_line = i.strip()
+                                    new_line = stripped_line.replace(oldprefix, prefix)
+
+                            dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
+                            os.chdir(dir)
+                            f.write(new_line + "\n")
+                        else:
+                            f = open('prefix.txt', 'a')
+                            f.write(f"{str(message.guild)} {prefix}\n")
+                            f.close()
                     # exception
                 except Exception as e:
                     # print exception
