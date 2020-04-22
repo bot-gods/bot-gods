@@ -28,8 +28,6 @@ Bblack = False
 calc = False
 roll = False
 prfx = "f"
-dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
-os.chdir(dir)
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
