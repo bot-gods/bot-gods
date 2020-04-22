@@ -28,6 +28,11 @@ Bblack = False
 calc = False
 roll = False
 prfx = "f"
+Ndata = False
+oldUser2 = ""
+oldchannel2 = ""
+
+
 dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
 os.chdir(dir)
 def readtoken():
@@ -65,12 +70,13 @@ async def update_stats():
 
 async def godUser(message):
     global prefix
-    global oldUser
+    global oldUser, oldUser2, oldChannel, oldchannel2
     global boolSW
     global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
+    global Ndata
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -210,7 +216,15 @@ async def godUser(message):
             pass
         elif message.content.startswith(f"{prefix}reactionrole delete"):
             pass
+        if message.content.startswith(f"{prefix}data add"):
+            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Note: They are caps sensitive, so If you want to access the data, remember what you wrote.")
+            await asyncio.sleep(0.5)
+            await message.channel.send("reply 'next' to this message to proceed. If you want to cancel the whole process, reply 'cancel' at any time")
+            Ndata = True
+            oldUser2 = message.author
+            oldchannel2 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
+
 
 
 
@@ -394,7 +408,9 @@ async def on_message(message):
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
     # if calc == True and boolSW == True and oldUser == str(message.author):
-
+    if Ndata == True and message.content == "next" and message.author == oldUser2:
+        await message.channel.send("please enter storage category")
+        category = True
     if Bblack == True and boolSW == True and oldUser == str(message.author):
         success = 0
         failure = 0
