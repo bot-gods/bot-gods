@@ -149,6 +149,7 @@ async def godUser(message):
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
                 embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
                 embedc.add_field(name=f"""{prefix}clear""", value="delete a number of messages")
+                embedc.add_field(name=f"""{prefix}data""", value="store and access important data")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -156,8 +157,7 @@ async def godUser(message):
                 await message.channel.send(embed=embedhe)
             elif message.content.endswith("members") is True:
                 embedme = discord.Embed(title=f"""{prefix}members""", Description="member count", color=3456491)
-                embedme.add_field(name=f"""{prefix}members""",
-                                  value="will return the current number of members in the server")
+                embedme.add_field(name=f"""{prefix}members""",value="will return the current number of members in the server")
                 await message.channel.send(embed=embedme)
             elif message.content.endswith("prefix") is True:
                 embedp = discord.Embed(title=f"""{prefix}prefix""", Description="change the prefix", color=3456491)
@@ -171,6 +171,13 @@ async def godUser(message):
             elif message.content.endswith("clear") is True:
                 embedclr = discord.Embed(title=f"""{prefix}clear""", Description="delete a number of messages", color=3456491)
                 embedclr.add_field(name=f"""{prefix}clear MESSAGES""", value="delete a number of messages")
+                await message.channel.send(embed=embedclr)
+            elif message.content.endswith("data") is True:
+                embedclr = discord.Embed(title=f"""{prefix}data""", Description="store and access important data",color=3456491)
+                embedclr.add_field(name=f"""{prefix}data add""", value="make a new category")
+                embedclr.add_field(name=f"""{prefix}data delete""", value="remove a category")
+                embedclr.add_field(name=f"""{prefix}data edit""", value="COMING SOON")
+                embedclr.add_field(name=f"""{prefix}data access""", value="COMING SOON")
                 await message.channel.send(embed=embedclr)
                 # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -321,6 +328,7 @@ async def basicUser(message):
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
                 embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
                 embedc.add_field(name=f"""{prefix}clear""", value="delete a number of messages")
+                embedc.add_field(name=f"""{prefix}data""", value="store and access important data")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -342,6 +350,13 @@ async def basicUser(message):
             elif message.content.endswith("clear") is True:
                 embedclr = discord.Embed(title=f"""{prefix}clear""", Description="delete a number of messages", color=3456491)
                 embedclr.add_field(name=f"""{prefix}clear MESSAGES""", value="delete a number of messages")
+                await message.channel.send(embed=embedclr)
+            elif message.content.endswith("data") is True:
+                embedclr = discord.Embed(title=f"""{prefix}data""", Description="store and access important data",color=3456491)
+                embedclr.add_field(name=f"""{prefix}data add""", value="make a new category")
+                embedclr.add_field(name=f"""{prefix}data delete""", value="remove a category")
+                embedclr.add_field(name=f"""{prefix}data edit""", value="COMING SOON")
+                embedclr.add_field(name=f"""{prefix}data access""", value="COMING SOON")
                 await message.channel.send(embed=embedclr)
         # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
