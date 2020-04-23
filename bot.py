@@ -42,6 +42,9 @@ Ndata2 = False
 Ndata3 = False
 Next = False
 DData = False
+DData1 = False
+DData2 = False
+confirmedUser = False
 x = 0
 CategoryName = ""
 subsectionName = ""
@@ -85,13 +88,13 @@ async def update_stats():
 
 async def godUser(message):
     global prefix
-    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     global boolSW
     global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
-    global Ndata, Next, DData
+    global Ndata, Next, DData, DData2
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -242,6 +245,7 @@ async def godUser(message):
         if message.content.startswith(f"{prefix}data delete"):
             await message.channel.send("Reply to this message with the name of the category that you want to delete. If you want to cancel the whole process, reply 'cancel' at any time")
             DData = True
+            DData2 = True
             oldUser3 = message.author
             oldchannel3 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -257,7 +261,7 @@ async def basicUser(message):
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
-    global Ndata
+    global Ndata, Next, DData, DData2
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
         if message.content.startswith(prefix + "prefix") is True and message.content.endswith(
@@ -394,6 +398,20 @@ async def basicUser(message):
                 await message.channel.send(rnum)
         elif message.content.find(prefix + "clear") != -1:
             await message.content.send("You don't have permission to use this command.")
+        if message.content.startswith(f"{prefix}data add"):
+            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Note: They are caps sensitive, so If you want to access the data, remember what you wrote.")
+            await asyncio.sleep(0.5)
+            await message.channel.send("Reply to this message with the category name (Remember this). If you want to cancel the whole process, reply 'cancel' at any time")
+            Ndata = True
+            Next = True
+            oldUser2 = message.author
+            oldchannel2 = message.channel
+        if message.content.startswith(f"{prefix}data delete"):
+            await message.channel.send("Reply to this message with the name of the category that you want to delete. If you want to cancel the whole process, reply 'cancel' at any time")
+            DData = True
+            DData2 = True
+            oldUser3 = message.author
+            oldchannel3 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
 
 def readprefix(message):
@@ -422,7 +440,7 @@ async def on_message(message):
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
     global Ndata, Ndata1, Ndata2, Ndata3, Next, subsectionscompleted, CategoryName, x, subsectionName, subsectionValue
-    global filer, DData
+    global filer, DData, DData1, confirmedUser, DData2
     messages += 1
     readprefix(message)
     # prefix = "!"
@@ -435,23 +453,45 @@ async def on_message(message):
     if DData is True and message.author == oldUser3 and message.content.startswith("cancel") and message.channel == oldchannel3:
         async with message.channel.typing():
             DData = False
+            DData1 = False
+            DData2 = False
             await asyncio.sleep(0.5)
             await message.channel.send(f"Process Cancelled! :)")
-    if DData is True and message.author == oldUser2 and message.channel == oldchannel2:# message.author should be equal to the recorded creator on file (section 1)
+    if DData is True and DData2 is True and message.author == oldUser3 and message.channel == oldchannel3:
+        with open("data.txt", "r") as f:
+            file1 = f.readlines()
+            file2 = f.read()
+            if file2.find(message.content):
+                for line in file1:
+                    if line.find(str(message.author)) != -1:
+                        DData1 = True
+                        DData2 = False
+                        confirmedUser = True
+                if confirmedUser is not True:
+                    await message.channel.send(f"Sorry! Looks like you don't own that category! Ask the owner to delete it.")
+                    async with message.channel.typing():
+                        DData = False
+                        DData1 = False
+                        DData2 = False
+                        await asyncio.sleep(0.5)
+                        await message.channel.send(f"Process Cancelled! :(")
+            else:
+                await message.channel.send(f"Sorry! No file with that name was found. Remember that it's caps sensitive. Try again or cancel.")
+    if DData is True and DData1 is True and message.author == oldUser3 and message.channel == oldchannel3:
         with open("data.txt", "r") as f:
             file = f.read()
             lines = f.readlines()
-        if file.find(CategoryName) != -1:
+        if file.find(message.content) != -1:
             with open("data.txt", "w") as f:
                 for line in lines:
                     if line.find(message.content) == -1:
                         f.write(line)
             await asyncio.sleep(0.5)
-            await message.channel.send(f"File deleted! :)")
+            await message.channel.send(f"Category deleted! :)")
             DData = False
+            DData1 = False
         else:
-            await message.channel.send(f"Sorry! No file with that name was found. Remember that it's caps sensitive. Try again or cancel.")
-    # if DData1 is True and message.author == oldUser2 and message.channel == oldchannel2:
+            await message.channel.send(f"Sorry! No category with that name was found. Remember that it's caps sensitive. Try again or cancel.")
     if Ndata is True and message.author == oldUser2 and message.content.startswith("cancel") and message.channel == oldchannel2:
         async with message.channel.typing():
             Ndata = False
