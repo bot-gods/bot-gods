@@ -1,1 +1,0 @@
-Kray;Brawn:10;Constitution:5;Agility:-10;Sense:-5;Intelligence':30;Willpower:20;Personality:15;Intuition:-5

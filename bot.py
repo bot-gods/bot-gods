@@ -30,11 +30,18 @@ roll = False
 prfx = "f"
 oldUser2 = ""
 oldchannel2 = ""
+oldUser3 = ""
+oldchannel3 = ""
+oldUser4 = ""
+oldchannel4 = ""
+oldUser5 = ""
+oldchannel5 = ""
 Ndata = False
 Ndata1 = False
 Ndata2 = False
 Ndata3 = False
 Next = False
+DData = False
 x = 0
 CategoryName = ""
 subsectionName = ""
@@ -78,13 +85,13 @@ async def update_stats():
 
 async def godUser(message):
     global prefix
-    global oldUser, oldUser2, oldChannel, oldchannel2
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     global boolSW
     global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
-    global Ndata, Next
+    global Ndata, Next, DData
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -232,7 +239,11 @@ async def godUser(message):
             Next = True
             oldUser2 = message.author
             oldchannel2 = message.channel
-
+        if message.content.startswith(f"{prefix}data delete"):
+            await message.channel.send("Reply to this message with the name of the category that you want to delete. If you want to cancel the whole process, reply 'cancel' at any time")
+            DData = True
+            oldUser3 = message.author
+            oldchannel3 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
 
 
@@ -240,7 +251,7 @@ async def godUser(message):
 
 async def basicUser(message):
     global prefix
-    global oldUser
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     global boolSW
     global oldprefix
     global green, purple, yellow, red, blue, black
@@ -405,13 +416,13 @@ def readprefix(message):
 async def on_message(message):
     global messages
     global prefix
-    global oldUser, oldChannel, oldUser2, oldchannel2
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     global boolSW
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
     global Ndata, Ndata1, Ndata2, Ndata3, Next, subsectionscompleted, CategoryName, x, subsectionName, subsectionValue
-    global filer
+    global filer, DData
     messages += 1
     readprefix(message)
     # prefix = "!"
@@ -421,7 +432,27 @@ async def on_message(message):
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
     # if calc == True and boolSW == True and oldUser == str(message.author):
-    if Ndata is True and message.author is oldUser2 and message.content.find("cancel") != -1 and message.channel == oldchannel2:
+    if DData is True and message.author == oldUser3 and message.content.startswith("cancel") and message.channel == oldchannel3:
+        async with message.channel.typing():
+            DData = False
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"Process Cancelled! :)")
+    if DData is True and message.author == oldUser2 and message.channel == oldchannel2:# message.author should be equal to the recorded creator on file (section 1)
+        with open("data.txt", "r") as f:
+            file = f.read()
+            lines = f.readlines()
+        if file.find(CategoryName) != -1:
+            with open("data.txt", "w") as f:
+                for line in lines:
+                    if line.find(message.content) == -1:
+                        f.write(line)
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"File deleted! :)")
+            DData = False
+        else:
+            await message.channel.send(f"Sorry! No file with that name was found. Remember that it's caps sensitive. Try again or cancel.")
+    # if DData1 is True and message.author == oldUser2 and message.channel == oldchannel2:
+    if Ndata is True and message.author == oldUser2 and message.content.startswith("cancel") and message.channel == oldchannel2:
         async with message.channel.typing():
             Ndata = False
             Ndata1 = False
@@ -454,19 +485,17 @@ async def on_message(message):
         else:
             with open("data.txt", "a") as f:
                 if subsectionscompleted == 1:
-                    print(1)
                     f.write(CategoryName + ";")
+                    f.write(str(message.author) + ";")
                     f.write(subsectionName + ":")
                     if x != 1:
                         f.write(subsectionValue + ";")
                     else:
                         f.write(subsectionValue + "\n")
                 elif subsectionscompleted == x:
-                    print(x)
                     f.write(subsectionName + ":")
                     f.write(subsectionValue + "\n")
                 else:
-                    print("mid")
                     f.write(subsectionName + ":")
                     f.write(subsectionValue + ";")
             Ndata1 = True
@@ -478,10 +507,9 @@ async def on_message(message):
         Ndata2 = False
     if Ndata is True and Ndata1 is True and message.author == oldUser2 and message.channel == oldchannel2:
         try:
-            subsectionscompleted += 1
-            if subsectionscompleted == 1:
+            if subsectionscompleted == 0:
                 x = abs(int(message.content))
-                print(x)
+            subsectionscompleted += 1
             if subsectionscompleted <= x:
                 await message.channel.send(f"What is subsection {subsectionscompleted}'s name?")
                 Ndata2 = True
@@ -499,10 +527,12 @@ async def on_message(message):
         except ValueError:
             await message.channel.send("Sorry! that looks like a word. Try again with a number")
     if Ndata is True and Next is True and message.author == oldUser2 and message.channel == oldchannel2:
-        await message.channel.send("please enter the number of sub-categories")
+        await message.channel.send("please enter the total number of subsections")
         CategoryName = message.content
+        subsectionscompleted = 0
         Ndata1 = True
         Next = False
+
     
     
 
