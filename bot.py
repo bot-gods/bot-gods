@@ -18,6 +18,8 @@ yellow = 0
 red = 0
 blue = 0
 black = 0
+fields = []
+var = []
 oldprefix = "yeet"
 Bgreen = False
 Bpurple = False
@@ -51,6 +53,9 @@ subsectionName = ""
 subsectionValue = ""
 filer = ""
 subsectionscompleted = 0
+Adata = False
+Adata1 = False
+
 dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
 os.chdir(dir)
 def readtoken():
@@ -93,7 +98,7 @@ async def godUser(message):
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
-    global Ndata, Next, DData, DData2
+    global Ndata, Next, DData, DData2, Adata, Adata1
     global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
@@ -177,7 +182,7 @@ async def godUser(message):
                 embedclr.add_field(name=f"""{prefix}data add""", value="make a new category")
                 embedclr.add_field(name=f"""{prefix}data delete""", value="remove a category")
                 embedclr.add_field(name=f"""{prefix}data edit""", value="COMING SOON")
-                embedclr.add_field(name=f"""{prefix}data access""", value="COMING SOON")
+                embedclr.add_field(name=f"""{prefix}data access""", value="access all of the subsections in a category")
                 await message.channel.send(embed=embedclr)
                 # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -231,7 +236,6 @@ async def godUser(message):
             else:
                 await message.channel.send(rnum)
         if message.content.find(prefix + "clear") != -1:
-
             amount = message.content.replace(prefix + "clear ", "")
             await message.channel.purge(limit=int(amount) + 1)
             await(await message.channel.send(f"{amount} messages cleared.")).delete(delay=4)
@@ -242,19 +246,25 @@ async def godUser(message):
         elif message.content.startswith(f"{prefix}reactionrole delete"):
             pass
         if message.content.startswith(f"{prefix}data add"):
-            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Note: They are caps sensitive, so If you want to access the data, remember what you wrote.")
+            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Please refrain from writing : and ; as it will mess up your stat block")
             await asyncio.sleep(0.5)
-            await message.channel.send("Reply to this message with the category name (Remember this). If you want to cancel the whole process, reply 'cancel' at any time")
+            await message.channel.send("Reply to this message with the category name (Remember this). It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
             Ndata = True
             Next = True
             oldUser2 = message.author
             oldchannel2 = message.channel
         if message.content.startswith(f"{prefix}data delete"):
-            await message.channel.send("Reply to this message with the name of the category that you want to delete. If you want to cancel the whole process, reply 'cancel' at any time")
+            await message.channel.send("Reply to this message with the name of the category that you want to delete. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
             DData = True
             DData2 = True
             oldUser3 = message.author
             oldchannel3 = message.channel
+        if message.content.startswith(f"{prefix}data access"):
+            await message.channel.send("Reply to this message with the name of the category that you want to access. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            Adata = True
+            Adata1 = True
+            oldUser4 = message.author
+            oldchannel4 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
 
 
@@ -268,7 +278,7 @@ async def basicUser(message):
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
-    global Ndata, Next, DData, DData2
+    global Ndata, Next, DData, DData2, Adata, Adata1
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
         if message.content.startswith(prefix + "prefix") is True and message.content.endswith(
@@ -356,7 +366,7 @@ async def basicUser(message):
                 embedclr.add_field(name=f"""{prefix}data add""", value="make a new category")
                 embedclr.add_field(name=f"""{prefix}data delete""", value="remove a category")
                 embedclr.add_field(name=f"""{prefix}data edit""", value="COMING SOON")
-                embedclr.add_field(name=f"""{prefix}data access""", value="COMING SOON")
+                embedclr.add_field(name=f"""{prefix}data access""", value="access all of the subsections in a category")
                 await message.channel.send(embed=embedclr)
         # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -414,19 +424,25 @@ async def basicUser(message):
         elif message.content.find(prefix + "clear") != -1:
             await message.content.send("You don't have permission to use this command.")
         if message.content.startswith(f"{prefix}data add"):
-            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Note: They are caps sensitive, so If you want to access the data, remember what you wrote.")
+            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Please refrain from writing : and ; as it will mess up your stat block")
             await asyncio.sleep(0.5)
-            await message.channel.send("Reply to this message with the category name (Remember this). If you want to cancel the whole process, reply 'cancel' at any time")
+            await message.channel.send("Reply to this message with the category name (Remember this). It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
             Ndata = True
             Next = True
             oldUser2 = message.author
             oldchannel2 = message.channel
         if message.content.startswith(f"{prefix}data delete"):
-            await message.channel.send("Reply to this message with the name of the category that you want to delete. If you want to cancel the whole process, reply 'cancel' at any time")
+            await message.channel.send("Reply to this message with the name of the category that you want to delete. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
             DData = True
             DData2 = True
             oldUser3 = message.author
             oldchannel3 = message.channel
+        if message.content.startswith(f"{prefix}data access"):
+            await message.channel.send("Reply to this message with the name of the category that you want to access. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            Adata = True
+            Adata1 = True
+            oldUser4 = message.author
+            oldchannel4 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
 
 def readprefix(message):
@@ -450,12 +466,12 @@ async def on_message(message):
     global messages
     global prefix
     global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
-    global boolSW
+    global boolSW, fields, var
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
     global Ndata, Ndata1, Ndata2, Ndata3, Next, subsectionscompleted, CategoryName, x, subsectionName, subsectionValue
-    global filer, DData, DData1, confirmedUser, DData2
+    global filer, DData, DData1, confirmedUser, DData2, Adata, Adata1
     messages += 1
     readprefix(message)
     # prefix = "!"
@@ -465,6 +481,31 @@ async def on_message(message):
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
     # if calc == True and boolSW == True and oldUser == str(message.author):
+    if Adata is True and message.author == oldUser4 and message.content.startswith("cancel") and message.channel == oldchannel4:
+        async with message.channel.typing():
+            Adata = False
+            Adata1 = False
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"Process Cancelled! :)")
+    if Adata is True and Adata1 is True and message.author == oldUser4 and message.channel == oldchannel4:
+        with open("data.txt", "r") as f:
+            file3 = f.readlines()
+            file4 = f.read()
+            if file4.find(message.content):
+                for line in file3:
+                    if line.startswith(str(message.content)):
+                        fields = line.strip("\n")
+                        fields = fields.split(";")
+                y = len(fields) - 2
+                embedh = discord.Embed(title=f"{message.content}", Description=f"{message.content}'s subsections", color=3456491)
+                for i in range(y):
+                    var = fields[i+2].split(":")
+                    embedh.add_field(name=f"{var[0]}", value=f"{var[1]}")
+                await message.channel.send(embed=embedh)
+                Adata = False
+                Adata1 = False
+            else:
+                await message.channel.send(f"Sorry! No file with that name was found. Remember that it's caps sensitive. Try again or cancel.")
     if DData is True and message.author == oldUser3 and message.content.startswith("cancel") and message.channel == oldchannel3:
         async with message.channel.typing():
             DData = False
