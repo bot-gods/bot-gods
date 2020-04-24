@@ -936,17 +936,17 @@ async def on_message(message):
             # log attempted command
         #     print(f"""{message.author} tried to use '{message.content}' in {message.channel}""")
 
-
+"""
 @client.event
 async def on_member_join(member):
     global basic_users
     global joined
     joined += 1
-    print(f"""{member} has joined the server! Put them into basic users.""")
-    for channel in member.server.channels:
+    print(f"{member} has joined the server!")
+    for channel in member.
         if str(channel) == "general":
-            await client.send_message(f"""Welcome to the server, {member.mention}! I am the almighty BotGod!""")
-
+            await client.send_message(f"Welcome to the server, {member.mention}! I am the almighty BotGod!)
+"""
 
 # constantly update stats
 client.loop.create_task(update_stats())
