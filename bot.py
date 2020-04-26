@@ -493,7 +493,8 @@ async def on_message(message):
             file4 = f.read()
             if file4.find(message.content):
                 for line in file3:
-                    if line.startswith(str(message.content)):
+                    line1 = line.split(";")
+                    if line1[0] == str(message.content):
                         fields = line.strip("\n")
                         fields = fields.split(";")
                 y = len(fields) - 2
