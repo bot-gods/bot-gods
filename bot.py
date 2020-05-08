@@ -18,6 +18,8 @@ yellow = 0
 red = 0
 blue = 0
 black = 0
+fields = []
+var = []
 oldprefix = "yeet"
 Bgreen = False
 Bpurple = False
@@ -28,6 +30,34 @@ Bblack = False
 calc = False
 roll = False
 prfx = "f"
+oldUser2 = ""
+oldchannel2 = ""
+oldUser3 = ""
+oldchannel3 = ""
+oldUser4 = ""
+oldchannel4 = ""
+oldUser5 = ""
+oldchannel5 = ""
+Ndata = False
+Ndata1 = False
+Ndata2 = False
+Ndata3 = False
+Next = False
+DData = False
+DData1 = False
+DData2 = False
+confirmedUser = False
+x = 0
+CategoryName = ""
+subsectionName = ""
+subsectionValue = ""
+filer = ""
+subsectionscompleted = 0
+Adata = False
+Adata1 = False
+
+dir = "C:/Users/EOLUser/PycharmProjects/bot-gods"
+os.chdir(dir)
 def readtoken():
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -63,12 +93,13 @@ async def update_stats():
 
 async def godUser(message):
     global prefix
-    global oldUser
     global boolSW
     global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
+    global Ndata, Next, DData, DData2, Adata, Adata1
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     # check weather the message begins with !
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
@@ -123,6 +154,7 @@ async def godUser(message):
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
                 embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
                 embedc.add_field(name=f"""{prefix}clear""", value="delete a number of messages")
+                embedc.add_field(name=f"""{prefix}data""", value="store and access important data")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -130,8 +162,7 @@ async def godUser(message):
                 await message.channel.send(embed=embedhe)
             elif message.content.endswith("members") is True:
                 embedme = discord.Embed(title=f"""{prefix}members""", Description="member count", color=3456491)
-                embedme.add_field(name=f"""{prefix}members""",
-                                  value="will return the current number of members in the server")
+                embedme.add_field(name=f"""{prefix}members""",value="will return the current number of members in the server")
                 await message.channel.send(embed=embedme)
             elif message.content.endswith("prefix") is True:
                 embedp = discord.Embed(title=f"""{prefix}prefix""", Description="change the prefix", color=3456491)
@@ -145,6 +176,13 @@ async def godUser(message):
             elif message.content.endswith("clear") is True:
                 embedclr = discord.Embed(title=f"""{prefix}clear""", Description="delete a number of messages", color=3456491)
                 embedclr.add_field(name=f"""{prefix}clear MESSAGES""", value="delete a number of messages")
+                await message.channel.send(embed=embedclr)
+            elif message.content.endswith("data") is True:
+                embedclr = discord.Embed(title=f"""{prefix}data""", Description="store and access important data",color=3456491)
+                embedclr.add_field(name=f"""{prefix}data add""", value="make a new category")
+                embedclr.add_field(name=f"""{prefix}data delete""", value="remove a category")
+                embedclr.add_field(name=f"""{prefix}data edit""", value="COMING SOON")
+                embedclr.add_field(name=f"""{prefix}data access""", value="access all of the subsections in a category")
                 await message.channel.send(embed=embedclr)
                 # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -198,7 +236,6 @@ async def godUser(message):
             else:
                 await message.channel.send(rnum)
         if message.content.find(prefix + "clear") != -1:
-
             amount = message.content.replace(prefix + "clear ", "")
             await message.channel.purge(limit=int(amount) + 1)
             await(await message.channel.send(f"{amount} messages cleared.")).delete(delay=4)
@@ -208,18 +245,40 @@ async def godUser(message):
             pass
         elif message.content.startswith(f"{prefix}reactionrole delete"):
             pass
+        if message.content.startswith(f"{prefix}data add"):
+            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Please refrain from writing : and ; as it will mess up your stat block")
+            await asyncio.sleep(0.5)
+            await message.channel.send("Reply to this message with the category name (Remember this). It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            Ndata = True
+            Next = True
+            oldUser2 = message.author
+            oldchannel2 = message.channel
+        if message.content.startswith(f"{prefix}data delete"):
+            await message.channel.send("Reply to this message with the name of the category that you want to delete. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            DData = True
+            DData2 = True
+            oldUser3 = message.author
+            oldchannel3 = message.channel
+        if message.content.startswith(f"{prefix}data access"):
+            await message.channel.send("Reply to this message with the name of the category that you want to access. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            Adata = True
+            Adata1 = True
+            oldUser4 = message.author
+            oldchannel4 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
+
 
 
 
 async def basicUser(message):
     global prefix
-    global oldUser
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
     global boolSW
     global oldprefix
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
+    global Ndata, Next, DData, DData2, Adata, Adata1
     if message.content.startswith(prefix) is True:
         # ##############################ADD NEW COMMANDS HERE#################################
         if message.content.startswith(prefix + "prefix") is True and message.content.endswith(
@@ -279,6 +338,7 @@ async def basicUser(message):
                 embedc.add_field(name=f"""{prefix}prefix""", value="changes the prefix")
                 embedc.add_field(name=f"""{prefix}roll""", value="roll a die")
                 embedc.add_field(name=f"""{prefix}clear""", value="delete a number of messages")
+                embedc.add_field(name=f"""{prefix}data""", value="store and access important data")
                 await message.channel.send(embed=embedc)
             elif message.content.endswith("hello") is True:
                 embedhe = discord.Embed(title=f"""{prefix}hello""", Description="Hello command", color=3456491)
@@ -300,6 +360,13 @@ async def basicUser(message):
             elif message.content.endswith("clear") is True:
                 embedclr = discord.Embed(title=f"""{prefix}clear""", Description="delete a number of messages", color=3456491)
                 embedclr.add_field(name=f"""{prefix}clear MESSAGES""", value="delete a number of messages")
+                await message.channel.send(embed=embedclr)
+            elif message.content.endswith("data") is True:
+                embedclr = discord.Embed(title=f"""{prefix}data""", Description="store and access important data",color=3456491)
+                embedclr.add_field(name=f"""{prefix}data add""", value="make a new category")
+                embedclr.add_field(name=f"""{prefix}data delete""", value="remove a category")
+                embedclr.add_field(name=f"""{prefix}data edit""", value="COMING SOON")
+                embedclr.add_field(name=f"""{prefix}data access""", value="access all of the subsections in a category")
                 await message.channel.send(embed=embedclr)
         # check for !hello
         if message.content.startswith(prefix + "hello") is True and message.content.endswith(prefix + "hello") is True:
@@ -356,6 +423,26 @@ async def basicUser(message):
                 await message.channel.send(rnum)
         elif message.content.find(prefix + "clear") != -1:
             await message.content.send("You don't have permission to use this command.")
+        if message.content.startswith(f"{prefix}data add"):
+            await message.channel.send("I will prompt you for different categories that you want me to store, then I will ask for values to put under them. Please refrain from writing : and ; as it will mess up your stat block")
+            await asyncio.sleep(0.5)
+            await message.channel.send("Reply to this message with the category name (Remember this). It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            Ndata = True
+            Next = True
+            oldUser2 = message.author
+            oldchannel2 = message.channel
+        if message.content.startswith(f"{prefix}data delete"):
+            await message.channel.send("Reply to this message with the name of the category that you want to delete. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            DData = True
+            DData2 = True
+            oldUser3 = message.author
+            oldchannel3 = message.channel
+        if message.content.startswith(f"{prefix}data access"):
+            await message.channel.send("Reply to this message with the name of the category that you want to access. It is CAPS SENSTITVE. If you want to cancel the whole process, reply 'cancel' at any time")
+            Adata = True
+            Adata1 = True
+            oldUser4 = message.author
+            oldchannel4 = message.channel
         # ##############################ADD NEW COMMANDS HERE#################################
 
 def readprefix(message):
@@ -378,11 +465,13 @@ def readprefix(message):
 async def on_message(message):
     global messages
     global prefix
-    global oldUser
-    global boolSW
+    global oldUser, oldUser2, oldUser3, oldUser4, oldUser5, oldChannel, oldchannel2, oldchannel3, oldchannel4, oldchannel5
+    global boolSW, fields, var
     global green, purple, yellow, red, blue, black
     global Bgreen, Bpurple, Byellow, Bred, Bblue, Bblack
     global calc, roll
+    global Ndata, Ndata1, Ndata2, Ndata3, Next, subsectionscompleted, CategoryName, x, subsectionName, subsectionValue
+    global filer, DData, DData1, confirmedUser, DData2, Adata, Adata1
     messages += 1
     readprefix(message)
     # prefix = "!"
@@ -392,8 +481,171 @@ async def on_message(message):
     basic_users = ["bumblebee#4138"]
     # place print(message.content) here to print out all messages
     # if calc == True and boolSW == True and oldUser == str(message.author):
+    if Adata is True and message.author == oldUser4 and message.content.startswith("cancel") and message.channel == oldchannel4:
+        async with message.channel.typing():
+            Adata = False
+            Adata1 = False
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"Process Cancelled! :)")
+    if Adata is True and Adata1 is True and message.author == oldUser4 and message.channel == oldchannel4:
+        with open("data.txt", "r") as f:
+            file3 = f.readlines()
+            file4 = f.read()
+            if file4.find(message.content):
+                for line in file3:
+                    line1 = line.split(";")
+                    if line1[0] == str(message.content):
+                        fields = line.strip("\n")
+                        fields = fields.split(";")
+                y = len(fields) - 2
+                embedh = discord.Embed(title=f"{message.content}", Description=f"{message.content}'s subsections", color=3456491)
+                for i in range(y):
+                    var = fields[i+2].split(":")
+                    embedh.add_field(name=f"{var[0]}", value=f"{var[1]}")
+                await message.channel.send(embed=embedh)
+                Adata = False
+                Adata1 = False
+            else:
+                await message.channel.send(f"Sorry! No file with that name was found. Remember that it's caps sensitive. Try again or cancel.")
+    if DData is True and message.author == oldUser3 and message.content.startswith("cancel") and message.channel == oldchannel3:
+        async with message.channel.typing():
+            DData = False
+            DData1 = False
+            DData2 = False
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"Process Cancelled! :)")
+    if DData is True and DData2 is True and message.author == oldUser3 and message.channel == oldchannel3:
+        with open("data.txt", "r") as f:
+            file1 = f.readlines()
+            file2 = f.read()
+            if file2.find(message.content):
+                for line in file1:
+                    if line.find(str(message.author)) != -1:
+                        DData1 = True
+                        DData2 = False
+                        confirmedUser = True
+                if confirmedUser is not True:
+                    await message.channel.send(f"Sorry! Looks like you don't own that category! Ask the owner to delete it.")
+                    async with message.channel.typing():
+                        DData = False
+                        DData1 = False
+                        DData2 = False
+                        await asyncio.sleep(0.5)
+                        await message.channel.send(f"Process Cancelled! :(")
+            else:
+                await message.channel.send(f"Sorry! No file with that name was found. Remember that it's caps sensitive. Try again or cancel.")
+    if DData is True and DData1 is True and message.author == oldUser3 and message.channel == oldchannel3:
+        with open("data.txt", "r") as f:
+            file = f.read()
+            lines = f.readlines()
+        if file.find(message.content) != -1:
+            with open("data.txt", "w") as f:
+                for line in lines:
+                    if line.find(message.content) == -1:
+                        f.write(line)
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"Category deleted! :)")
+            DData = False
+            DData1 = False
+        else:
+            await message.channel.send(f"Sorry! No category with that name was found. Remember that it's caps sensitive. Try again or cancel.")
+    if Ndata is True and message.author == oldUser2 and message.content.startswith("cancel") and message.channel == oldchannel2:
+        async with message.channel.typing():
+            Ndata = False
+            Ndata1 = False
+            Ndata2 = False
+            Ndata3 = False
+            Next = False
+            with open("data.txt", "r") as f:
+                lines = f.readlines()
+            with open("data.txt", "w") as f:
+                for line in lines:
+                    if line.find(CategoryName) == -1:
+                        f.write(line)
+            await asyncio.sleep(0.5)
+            await message.channel.send(f"Process Cancelled! :)")
+    if Ndata is True and Ndata3 is True and message.author == oldUser2 and message.channel == oldchannel2:
+        subsectionValue = str(message.content)
+        if subsectionscompleted == 1:
+            with open("data.txt", "r") as f:
+                filer = f.read()
+        if filer.find(CategoryName) != -1:
+            await message.channel.send("Sorry! This category already exists! Please try again.")
+            async with message.channel.typing():
+                Ndata = False
+                Ndata1 = False
+                Ndata2 = False
+                Ndata3 = False
+                Next = False
+                await asyncio.sleep(0.5)
+                await message.channel.send(f"Process Cancelled! :(")
+        else:
+            with open("data.txt", "a") as f:
+                if subsectionscompleted == 1:
+                    f.write(CategoryName + ";")
+                    f.write(str(message.author) + ";")
+                    f.write(subsectionName + ":")
+                    if x != 1:
+                        f.write(subsectionValue + ";")
+                    else:
+                        f.write(subsectionValue + "\n")
+                elif subsectionscompleted == x:
+                    f.write(subsectionName + ":")
+                    f.write(subsectionValue + "\n")
+                else:
+                    f.write(subsectionName + ":")
+                    f.write(subsectionValue + ";")
+            Ndata1 = True
+            Ndata3 = False
+    if Ndata is True and Ndata2 is True and message.author == oldUser2 and message.channel == oldchannel2:
+        subsectionName = str(message.content)
+        await message.channel.send(f"What is subsection {subsectionscompleted}'s value? (can be a number or a sentance)")
+        Ndata3 = True
+        Ndata2 = False
+    if Ndata is True and Ndata1 is True and message.author == oldUser2 and message.channel == oldchannel2:
+        try:
+            if subsectionscompleted == 0:
+                x = abs(int(message.content))
+            subsectionscompleted += 1
+            if subsectionscompleted <= x:
+                await message.channel.send(f"What is subsection {subsectionscompleted}'s name?")
+                Ndata2 = True
+                Ndata1 = False
+            else:
+                async with message.channel.typing():
+                    Ndata = False
+                    Ndata1 = False
+                    Ndata2 = False
+                    Ndata3 = False
+                    Next = False
+                    await asyncio.sleep(1)
+                    await message.channel.send(f"Process completed! {CategoryName} has been saved")
 
-    if Bblack == True and boolSW == True and oldUser == str(message.author):
+        except ValueError:
+            await message.channel.send("Sorry! that looks like a word. Try again with a number")
+    if Ndata is True and Next is True and message.author == oldUser2 and message.channel == oldchannel2:
+        await message.channel.send("please enter the total number of subsections")
+        CategoryName = message.content
+        subsectionscompleted = 0
+        Ndata1 = True
+        Next = False
+
+    
+    
+
+    ###########################ROLL###################################################3
+    if boolSW is True and oldUser == str(message.author) and message.content == "cancel" and message.channel == oldChannel:
+        boolSW = False
+        Bgreen = False
+        Bpurple = False
+        Byellow = False
+        Bred = False
+        Bblue = False
+        Bblack = False
+        calc = False
+        roll = False
+        await message.channel.send("process cancelled. :)")
+    if Bblack is True and boolSW is True and oldUser == str(message.author) and message.channel == oldChannel:
         success = 0
         failure = 0
         advantage = 0
@@ -577,7 +829,7 @@ async def on_message(message):
             await message.channel.send(embed=embedSW)
             boolSW = False
             calc = False
-    if Bblue == True and boolSW == True and oldUser == str(message.author):
+    if Bblue is True and boolSW is True and oldUser == str(message.author) and message.channel == oldChannel:
         try:
             if int(message.content) <= 500:
                 blue = int(message.content)
@@ -592,7 +844,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if Bred == True and boolSW == True and oldUser == str(message.author):
+    if Bred is True and boolSW is True and oldUser == str(message.author) and message.channel == oldChannel:
         try:
             if int(message.content) <= 500:
                 red = int(message.content)
@@ -607,7 +859,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if Byellow == True and boolSW == True and oldUser == str(message.author):
+    if Byellow is True and boolSW is True and oldUser == str(message.author) and message.channel == oldChannel:
         try:
             if int(message.content) <= 500:
                 yellow = int(message.content)
@@ -622,7 +874,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if Bpurple == True and boolSW == True and oldUser == str(message.author):
+    if Bpurple is True and boolSW is True and oldUser == str(message.author) and message.channel == oldChannel:
         try:
             if int(message.content) <= 500:
                 purple = int(message.content)
@@ -637,7 +889,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if Bgreen == True and boolSW == True and oldUser == str(message.author):
+    if Bgreen is True and boolSW is True and oldUser == str(message.author) and message.channel == oldChannel:
         try:
             if int(message.content) <= 500:
                 green = int(message.content)
@@ -652,21 +904,11 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("An error has occurred. Try again, or cancel")
-    if boolSW == True and oldUser == str(message.author) and message.content == "roll" or message.content == "Roll":
+    if boolSW is True and oldUser is str(message.author) and message.content == "roll" or "Roll" and message.channel == oldChannel:
         await message.channel.send("how many green dice?")
         Bgreen = True
         roll = False
-    if boolSW == True and oldUser == str(message.author) and message.content == "cancel":
-        boolSW = False
-        Bgreen = False
-        Bpurple = False
-        Byellow = False
-        Bred = False
-        Bblue = False
-        Bblack = False
-        calc = False
-        roll = False
-        await message.channel.send("process cancelled. :)")
+
 
 
 
@@ -695,17 +937,17 @@ async def on_message(message):
             # log attempted command
         #     print(f"""{message.author} tried to use '{message.content}' in {message.channel}""")
 
-
+"""
 @client.event
 async def on_member_join(member):
     global basic_users
     global joined
     joined += 1
-    print(f"""{member} has joined the server! Put them into basic users.""")
-    for channel in member.server.channels:
+    print(f"{member} has joined the server!")
+    for channel in member.
         if str(channel) == "general":
-            await client.send_message(f"""Welcome to the server, {member.mention}! I am the almighty BotGod!""")
-
+            await client.send_message(f"Welcome to the server, {member.mention}! I am the almighty BotGod!)
+"""
 
 # constantly update stats
 client.loop.create_task(update_stats())
